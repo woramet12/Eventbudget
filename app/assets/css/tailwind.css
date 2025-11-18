@@ -1,0 +1,28 @@
+/* ================================
+   Import All Tailwind Directives
+   ================================ */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ================================
+   Import Custom CSS Files
+   ================================ */
+
+/* Variables & Theme Colors */
+@import './styles/variables.css';
+
+/* Layout Components */
+@import './styles/layout.css';
+
+/* Button Components */
+@import './styles/buttons.css';
+
+/* Card Components */
+@import './styles/cards.css';
+
+/* Typography Components */
+@import './styles/typography.css';
+
+/* Extra Utilities */
+@import './styles/utilities-extra.css';
