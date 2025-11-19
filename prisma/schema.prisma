@@ -1,0 +1,30 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Event {
+  id                Int      @id @default(autoincrement())
+  name              String
+  description       String?  @db.Text
+  start_date        String?  // หรือใช้ DateTime ถ้ายากจัดการเรื่อง Timezone
+  end_date          String?
+  client_name       String?
+  location          String?
+  total_budget      Float?
+  venue_name        String?
+  venue_url         String?
+  accommodation_name String?
+  accommodation_url String?
+  drive_link        String?
+  
+  // สร้างความสัมพันธ์กับ Expenses (ถ้ามี)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+}
