@@ -40,16 +40,28 @@ export const useEventsApi = () => {
     }
   }
 
-  const createEvent = async (eventData) => {
-    const newEvent = { 
-      ...defaultEvent, // ใช้ default เป็นฐาน
-      ...eventData, 
-      id: Math.max(0, ...events.value.map(e => e.id)) + 1 
+ const createEvent = async (eventData) => {
+    pending.value = true
+    try {
+      // ⭐️ เปลี่ยนตรงนี้: ยิงไปที่ API /api/events (POST)
+      const newEvent = await $fetch('/api/events', {
+        method: 'POST',
+        body: eventData
+      })
+      
+      // อัปเดตหน้าจอทันที
+      events.value.unshift({ 
+        ...defaultEvent, 
+        ...newEvent 
+      })
+      alert('บันทึกข้อมูลสำเร็จ!')
+      
+    } catch (error) {
+      console.error(error)
+      alert('เกิดข้อผิดพลาดในการบันทึก')
+    } finally {
+      pending.value = false
     }
-    events.value.push(newEvent)
-    // ในสถานการณ์จริง ตรงนี้จะยิง API POST
-    alert('เพิ่มอีเว้นต์สำเร็จ! (Mock)')
-    return newEvent
   }
   
   const updateEvent = async (id, eventData) => {
