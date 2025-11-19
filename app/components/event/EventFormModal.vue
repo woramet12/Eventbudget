@@ -56,9 +56,9 @@ const save = () => emits('save', { ...form })
 </script>
 
 <template>
-  <div v-if="show" class="fixed inset-0 flex items-start justify-center p-4 pt-10 z-[100] bg-black/50 backdrop-blur-sm overflow-y-auto">
+  <div v-if="show" class="fixed inset-0 flex items-start justify-center p-4 pt-24 z-[999] bg-black/50 backdrop-blur-sm overflow-y-auto">
     
-    <div class="relative w-full max-w-2xl bg-white text-text-primary rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
+    <div class="relative w-full max-w-2xl bg-white text-text-primary rounded-xl shadow-2xl flex flex-col max-h-[85vh]">
       
       <header class="flex-shrink-0 flex items-center justify-between px-6 py-4 border-b border-gray-200">
         <h3 class="text-lg font-semibold text-gray-900">

@@ -26,7 +26,7 @@ onMounted(() => {
 <template>
   <div class="bg-base-bg min-h-screen text-text-primary">
     
-    <header class="p-4 flex items-center gap-4 sticky top-0 bg-white/80 backdrop-blur-sm z-10 border-b border-base-border">
+    <header class="p-4 flex items-center gap-4 sticky top-0 bg-white/80 backdrop-blur-sm z-50 border-b border-base-border">
       <NuxtLink to="/" class="text-accent text-2xl hover:text-accent-hover">&lt;</NuxtLink>
       
       <h1 class="text-xl font-semibold truncate">{{ currentEventName }}</h1>
