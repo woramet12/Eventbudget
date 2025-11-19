@@ -4,7 +4,7 @@ const events = ref([])
 const pending = ref(false)
 let initialized = false
 
-// ⭐️ สร้าง Default object ให้ตรงกับ DB
+// ⭐️ Default object ที่ตรงกับตาราง events ใน DB 100%
 const defaultEvent = {
   id: 0,
   name: 'No Name',
@@ -29,7 +29,7 @@ export const useEventsApi = () => {
     try {
       const data = await $fetch('/api/events') 
       events.value = data.map(e => ({
-        ...defaultEvent, // ⭐️ ใช้ Default object
+        ...defaultEvent, // Merge กับ default เพื่อกัน Field หาย
         ...e 
       })) 
       initialized = true
@@ -40,14 +40,15 @@ export const useEventsApi = () => {
     }
   }
 
-  // ⭐️ ฟังก์ชัน CRUD ตอนนี้จะรับ data ที่ตรงกับ DB เป๊ะๆ
   const createEvent = async (eventData) => {
     const newEvent = { 
+      ...defaultEvent, // ใช้ default เป็นฐาน
       ...eventData, 
       id: Math.max(0, ...events.value.map(e => e.id)) + 1 
     }
     events.value.push(newEvent)
-    alert('เพิ่มอีเว้นต์สำเร็จ! (จำลอง)')
+    // ในสถานการณ์จริง ตรงนี้จะยิง API POST
+    alert('เพิ่มอีเว้นต์สำเร็จ! (Mock)')
     return newEvent
   }
   
@@ -55,16 +56,19 @@ export const useEventsApi = () => {
     const index = events.value.findIndex(e => e.id === id)
     if (index !== -1) {
       events.value[index] = { ...events.value[index], ...eventData }
-      alert('อัปเดตข้อมูลสำเร็จ! (จำลอง)')
+      // ในสถานการณ์จริง ตรงนี้จะยิง API PUT/PATCH
+      alert('อัปเดตข้อมูลสำเร็จ! (Mock)')
     }
   }
 
   const deleteEvent = async (id) => {
     events.value = events.value.filter(e => e.id !== id)
-    alert('ลบข้อมูลสำเร็จ! (จำลอง)')
+    // ในสถานการณ์จริง ตรงนี้จะยิง API DELETE
+    alert('ลบข้อมูลสำเร็จ! (Mock)')
   }
 
   const getEventById = (id) => {
+    // คืนค่าเป็น ref เพื่อให้ reactive
     const event = events.value.find(e => e.id === Number(id))
     return ref(event ? { ...defaultEvent, ...event } : null)
   }
