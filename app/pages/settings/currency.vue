@@ -4,7 +4,9 @@ import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
 import EventFabButton from '~/components/event/EventFabButton.vue'
 import { useSettingsApi } from '~/composables/useSettingsApi'
+import { useAppLocale } from '~/composables/useAppLocale'
 
+const { t } = useAppLocale()
 const { currencies, createCurrency, updateCurrency, deleteCurrency } = useSettingsApi()
 const isModalOpen = ref(false)
 const isEditing = ref(false)
@@ -29,14 +31,14 @@ const handleSave = () => {
 }
 
 const handleDelete = (item) => {
-  if (item.is_base_currency) return alert('ไม่สามารถลบสกุลเงินหลักได้')
-  if (confirm(`ลบสกุลเงิน "${item.code}"?`)) deleteCurrency(item.id)
+  if (item.is_base_currency) return alert(t.value.cannot_delete_base)
+  if (confirm(`${t.value.confirm_delete} "${item.code}"?`)) deleteCurrency(item.id)
 }
 </script>
 
 <template>
   <NuxtLayout name="default">
-    <template #header-title>จัดการสกุลเงิน</template>
+    <template #header-title>{{ t.currency_management }}</template>
     
     <div>
       <div class="max-w-3xl space-y-3">
@@ -50,8 +52,8 @@ const handleDelete = (item) => {
             <p class="text-sm text-text-primary font-medium mt-1">Rate: {{ cur.rate_to_base }}</p>
           </div>
           <div class="flex gap-2">
-            <UiButton variant="secondary" @click="openEdit(cur)">แก้ไข</UiButton>
-            <UiButton v-if="!cur.is_base_currency" variant="danger" @click="handleDelete(cur)">ลบ</UiButton>
+            <UiButton variant="secondary" @click="openEdit(cur)">{{ t.edit }}</UiButton>
+            <UiButton v-if="!cur.is_base_currency" variant="danger" @click="handleDelete(cur)">{{ t.delete }}</UiButton>
           </div>
         </UiCard>
       </div>
@@ -63,15 +65,15 @@ const handleDelete = (item) => {
 
     <div v-if="isModalOpen" class="fixed inset-0 flex items-start justify-center p-4 pt-20 z-[100] bg-black/50 backdrop-blur-sm">
       <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-6 space-y-4">
-        <h3 class="text-xl font-bold text-text-primary mb-4">{{ isEditing ? 'แก้ไข' : 'เพิ่ม' }}สกุลเงิน</h3>
+        <h3 class="text-xl font-bold text-text-primary mb-4">{{ isEditing ? t.edit_currency : t.add_currency }}</h3>
         
-        <UiInput v-model="form.code" label="รหัสสกุลเงิน (เช่น USD)" />
-        <UiInput v-model="form.name" label="ชื่อสกุลเงิน" />
-        <UiInput v-model.number="form.rate_to_base" label="อัตราแลกเปลี่ยน (เทียบกับ THB)" type="number" />
+        <UiInput v-model="form.code" :label="t.label_code" />
+        <UiInput v-model="form.name" :label="t.label_currency_name" />
+        <UiInput v-model.number="form.rate_to_base" :label="t.label_rate" type="number" />
 
         <div class="flex justify-end gap-3 pt-4">
-          <UiButton variant="secondary" @click="isModalOpen = false">ยกเลิก</UiButton>
-          <UiButton variant="primary" @click="handleSave">บันทึก</UiButton>
+          <UiButton variant="secondary" @click="isModalOpen = false">{{ t.cancel }}</UiButton>
+          <UiButton variant="primary" @click="handleSave">{{ t.save }}</UiButton>
         </div>
       </div>
     </div>

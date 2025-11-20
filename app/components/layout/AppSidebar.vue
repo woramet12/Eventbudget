@@ -1,29 +1,25 @@
 <script setup>
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { watch, onMounted, onUnmounted, computed } from 'vue'
+import { useAppLocale } from '~/composables/useAppLocale' // เรียกใช้ Composable
 
-const props = defineProps({
-  isOpen: Boolean,
-})
+const props = defineProps({ isOpen: Boolean })
 const emits = defineEmits(['close'])
+const { t } = useAppLocale()
 
-const menuItems = [
-  { name: 'Event Management', to: '/', icon: '📅' },
-  { name: 'Expense Categories', to: '/settings/categories', icon: '💳' },
-  { name: 'Currency Management', to: '/settings/currency', icon: '💲' },
-  { name: 'Team Management', to: '/settings/team', icon: '👥' },
-  { name: 'General Settings', to: '/settings', icon: '⚙️' },
-]
+// ใช้ computed เพื่อให้เปลี่ยนภาษาตาม
+const menuItems = computed(() => [
+  { name: t.value.nav_events, to: '/', icon: '📅' },
+  { name: t.value.nav_categories, to: '/settings/categories', icon: '💳' },
+  { name: t.value.nav_currency, to: '/settings/currency', icon: '💲' },
+  { name: t.value.nav_team, to: '/settings/team', icon: '👥' },
+  { name: t.value.nav_settings, to: '/settings', icon: '⚙️' },
+])
 
 onMounted(() => {
   watch(() => props.isOpen, (val) => {
-    if (val) {
-      document.body.classList.add('overflow-hidden')
-    } else {
-      document.body.classList.remove('overflow-hidden')
-    }
-  }, { 
-    immediate: true 
-  })
+    if (val) document.body.classList.add('overflow-hidden')
+    else document.body.classList.remove('overflow-hidden')
+  }, { immediate: true })
 })
 
 onUnmounted(() => {
@@ -31,11 +27,8 @@ onUnmounted(() => {
 })
 
 watch(() => useRoute().fullPath, () => {
-  if (props.isOpen) {
-    emits('close')
-  }
+  if (props.isOpen) emits('close')
 })
-
 </script>
 
 <template>
@@ -59,7 +52,7 @@ watch(() => useRoute().fullPath, () => {
       <nav class="p-4 space-y-2">
         <NuxtLink
           v-for="item in menuItems"
-          :key="item.name"
+          :key="item.to"
           :to="item.to"
           class="flex items-center gap-3 px-4 py-3 rounded-lg text-white hover:bg-white/20 transition-colors"
           active-class="!bg-white/20"

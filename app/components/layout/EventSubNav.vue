@@ -1,12 +1,15 @@
 <script setup>
+import { useAppLocale } from '~/composables/useAppLocale'
+const { t } = useAppLocale()
 defineProps({ eventId: [String, Number] })
-const navItems = [
-  { name: 'Dashboard', to: '', icon: '📊' },
-  { name: 'Budget', to: '/budget', icon: '💰' },
-  { name: 'Expenses', to: '/expenses', icon: '🧾' },
-  { name: 'Timeline', to: '/timeline', icon: '🗓️' },
-  { name: 'Tasks', to: '/tasks', icon: '✅' },
-]
+
+const navItems = computed(() => [
+  { name: t.value.tab_dashboard, to: '', icon: '📊' },
+  { name: t.value.tab_budget, to: '/budget', icon: '💰' },
+  { name: t.value.tab_expenses, to: '/expenses', icon: '🧾' },
+  { name: t.value.tab_timeline, to: '/timeline', icon: '🗓️' },
+  { name: t.value.tab_tasks, to: '/tasks', icon: '✅' },
+])
 </script>
 <template>
   <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-base-border h-20 flex justify-around items-center z-20 shadow-lg">

@@ -4,7 +4,9 @@ import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
 import EventFabButton from '~/components/event/EventFabButton.vue'
 import { useSettingsApi } from '~/composables/useSettingsApi'
+import { useAppLocale } from '~/composables/useAppLocale'
 
+const { t } = useAppLocale()
 const { categories, createCategory, updateCategory, deleteCategory } = useSettingsApi()
 const isModalOpen = ref(false)
 const isEditing = ref(false)
@@ -29,13 +31,13 @@ const handleSave = () => {
 }
 
 const handleDelete = (item) => {
-  if (confirm(`ลบหมวดหมู่ "${item.name}"?`)) deleteCategory(item.id)
+  if (confirm(`${t.value.confirm_delete} "${item.name}"?`)) deleteCategory(item.id)
 }
 </script>
 
 <template>
   <NuxtLayout name="default">
-    <template #header-title>หมวดหมู่ค่าใช้จ่าย</template>
+    <template #header-title>{{ t.settings_categories }}</template>
     
     <div>
       <div class="max-w-3xl space-y-3">
@@ -45,8 +47,8 @@ const handleDelete = (item) => {
             <span class="text-lg font-medium text-text-primary">{{ cat.name }}</span>
           </div>
           <div class="flex gap-2">
-            <UiButton variant="secondary" @click="openEdit(cat)">แก้ไข</UiButton>
-            <UiButton variant="danger" @click="handleDelete(cat)">ลบ</UiButton>
+            <UiButton variant="secondary" @click="openEdit(cat)">{{ t.edit }}</UiButton>
+            <UiButton variant="danger" @click="handleDelete(cat)">{{ t.delete }}</UiButton>
           </div>
         </UiCard>
       </div>
@@ -58,14 +60,14 @@ const handleDelete = (item) => {
 
     <div v-if="isModalOpen" class="fixed inset-0 flex items-start justify-center p-4 pt-20 z-[100] bg-black/50 backdrop-blur-sm">
       <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-6 space-y-4">
-        <h3 class="text-xl font-bold text-text-primary mb-4">{{ isEditing ? 'แก้ไข' : 'เพิ่ม' }}หมวดหมู่</h3>
+        <h3 class="text-xl font-bold text-text-primary mb-4">{{ isEditing ? t.settings_edit_category : t.settings_add_category }}</h3>
         
-        <UiInput v-model="form.name" label="ชื่อหมวดหมู่" />
-        <UiInput v-model="form.icon" label="ไอคอน (Emoji)" placeholder="เช่น 🍔" />
+        <UiInput v-model="form.name" :label="t.label_cat_name" />
+        <UiInput v-model="form.icon" :label="t.label_cat_icon" placeholder="🍔" />
 
         <div class="flex justify-end gap-3 pt-4">
-          <UiButton variant="secondary" @click="isModalOpen = false">ยกเลิก</UiButton>
-          <UiButton variant="primary" @click="handleSave">บันทึก</UiButton>
+          <UiButton variant="secondary" @click="isModalOpen = false">{{ t.cancel }}</UiButton>
+          <UiButton variant="primary" @click="handleSave">{{ t.save }}</UiButton>
         </div>
       </div>
     </div>

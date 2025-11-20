@@ -4,7 +4,9 @@ import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
 import EventFabButton from '~/components/event/EventFabButton.vue'
 import { useSettingsApi } from '~/composables/useSettingsApi'
+import { useAppLocale } from '~/composables/useAppLocale'
 
+const { t } = useAppLocale()
 const { teamMembers, createTeamMember, updateTeamMember, deleteTeamMember } = useSettingsApi()
 const isModalOpen = ref(false)
 const isEditing = ref(false)
@@ -29,13 +31,13 @@ const handleSave = () => {
 }
 
 const handleDelete = (item) => {
-  if (confirm(`ลบสมาชิก "${item.name}"?`)) deleteTeamMember(item.id)
+  if (confirm(`${t.value.confirm_delete_member} "${item.name}"`)) deleteTeamMember(item.id)
 }
 </script>
 
 <template>
   <NuxtLayout name="default">
-    <template #header-title>จัดการทีม</template>
+    <template #header-title>{{ t.team_management }}</template>
     
     <div>
       <div class="max-w-3xl space-y-3">
@@ -51,8 +53,8 @@ const handleDelete = (item) => {
             </div>
           </div>
           <div class="flex gap-2">
-            <UiButton variant="secondary" @click="openEdit(member)">แก้ไข</UiButton>
-            <UiButton variant="danger" @click="handleDelete(member)">ลบ</UiButton>
+            <UiButton variant="secondary" @click="openEdit(member)">{{ t.edit }}</UiButton>
+            <UiButton variant="danger" @click="handleDelete(member)">{{ t.delete }}</UiButton>
           </div>
         </UiCard>
       </div>
@@ -64,15 +66,15 @@ const handleDelete = (item) => {
 
     <div v-if="isModalOpen" class="fixed inset-0 flex items-start justify-center p-4 pt-20 z-[100] bg-black/50 backdrop-blur-sm">
       <div class="w-full max-w-md bg-white rounded-xl shadow-2xl p-6 space-y-4">
-        <h3 class="text-xl font-bold text-text-primary mb-4">{{ isEditing ? 'แก้ไข' : 'เพิ่ม' }}สมาชิก</h3>
+        <h3 class="text-xl font-bold text-text-primary mb-4">{{ isEditing ? t.edit_member : t.add_member }}</h3>
         
-        <UiInput v-model="form.name" label="ชื่อ-นามสกุล" />
-        <UiInput v-model="form.email" label="อีเมล" type="email" />
-        <UiInput v-model="form.phone" label="เบอร์โทรศัพท์" />
+        <UiInput v-model="form.name" :label="t.label_name" />
+        <UiInput v-model="form.email" :label="t.label_email" type="email" />
+        <UiInput v-model="form.phone" :label="t.label_phone" />
 
         <div class="flex justify-end gap-3 pt-4">
-          <UiButton variant="secondary" @click="isModalOpen = false">ยกเลิก</UiButton>
-          <UiButton variant="primary" @click="handleSave">บันทึก</UiButton>
+          <UiButton variant="secondary" @click="isModalOpen = false">{{ t.cancel }}</UiButton>
+          <UiButton variant="primary" @click="handleSave">{{ t.save }}</UiButton>
         </div>
       </div>
     </div>
