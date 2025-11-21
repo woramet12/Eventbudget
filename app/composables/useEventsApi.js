@@ -1,19 +1,19 @@
+// app/composables/useEventsApi.js
 import { ref } from 'vue'
 
 const events = ref([])
 const pending = ref(false)
 let initialized = false
 
-// ⭐️ Default object ที่ตรงกับตาราง events ใน DB 100%
 const defaultEvent = {
   id: 0,
-  name: 'No Name',
+  name: '',
   description: '',
   start_date: '',
   end_date: '',
   client_name: '',
   location: '',
-  total_budget: null,
+  total_budget: 0,
   venue_name: '',
   venue_url: '',
   accommodation_name: '',
@@ -23,13 +23,14 @@ const defaultEvent = {
 
 export const useEventsApi = () => {
   
+  // 1. ดึงข้อมูล (GET) จาก DB จริง
   const fetchEvents = async () => {
     if (initialized) return 
     pending.value = true
     try {
       const data = await $fetch('/api/events') 
       events.value = data.map(e => ({
-        ...defaultEvent, // Merge กับ default เพื่อกัน Field หาย
+        ...defaultEvent,
         ...e 
       })) 
       initialized = true
@@ -40,47 +41,74 @@ export const useEventsApi = () => {
     }
   }
 
- const createEvent = async (eventData) => {
+  // 2. สร้างข้อมูล (POST) ลง DB จริง
+  const createEvent = async (eventData) => {
     pending.value = true
     try {
-      // ⭐️ เปลี่ยนตรงนี้: ยิงไปที่ API /api/events (POST)
       const newEvent = await $fetch('/api/events', {
         method: 'POST',
         body: eventData
       })
       
-      // อัปเดตหน้าจอทันที
-      events.value.unshift({ 
-        ...defaultEvent, 
-        ...newEvent 
-      })
+      events.value.unshift({ ...defaultEvent, ...newEvent })
       alert('บันทึกข้อมูลสำเร็จ!')
       
     } catch (error) {
-      console.error(error)
+      console.error('Create error:', error)
       alert('เกิดข้อผิดพลาดในการบันทึก')
     } finally {
       pending.value = false
     }
   }
   
+  // 3. แก้ไขข้อมูล (PUT) ลง DB จริง
   const updateEvent = async (id, eventData) => {
-    const index = events.value.findIndex(e => e.id === id)
-    if (index !== -1) {
-      events.value[index] = { ...events.value[index], ...eventData }
-      // ในสถานการณ์จริง ตรงนี้จะยิง API PUT/PATCH
-      alert('อัปเดตข้อมูลสำเร็จ! (Mock)')
+    pending.value = true
+    try {
+      // ส่งข้อมูลไปอัปเดตที่ Server
+      const updated = await $fetch('/api/events', {
+        method: 'PUT',
+        body: { id, ...eventData }
+      })
+
+      // อัปเดตหน้าจอ
+      const index = events.value.findIndex(e => e.id === id)
+      if (index !== -1) {
+        events.value[index] = { ...events.value[index], ...updated }
+      }
+      alert('อัปเดตข้อมูลสำเร็จ!')
+
+    } catch (error) {
+      console.error('Update error:', error)
+      alert('เกิดข้อผิดพลาดในการแก้ไข')
+    } finally {
+      pending.value = false
     }
   }
 
+  // 4. ลบข้อมูล (DELETE) ออกจาก DB จริง
   const deleteEvent = async (id) => {
-    events.value = events.value.filter(e => e.id !== id)
-    // ในสถานการณ์จริง ตรงนี้จะยิง API DELETE
-    alert('ลบข้อมูลสำเร็จ! (Mock)')
+    pending.value = true
+    try {
+      // ส่งคำสั่งลบไปที่ Server
+      await $fetch('/api/events', {
+        method: 'DELETE',
+        query: { id }
+      })
+
+      // ลบออกจากหน้าจอ
+      events.value = events.value.filter(e => e.id !== id)
+      alert('ลบข้อมูลสำเร็จ!')
+
+    } catch (error) {
+      console.error('Delete error:', error)
+      alert('เกิดข้อผิดพลาดในการลบ')
+    } finally {
+      pending.value = false
+    }
   }
 
   const getEventById = (id) => {
-    // คืนค่าเป็น ref เพื่อให้ reactive
     const event = events.value.find(e => e.id === Number(id))
     return ref(event ? { ...defaultEvent, ...event } : null)
   }

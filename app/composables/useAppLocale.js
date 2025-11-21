@@ -96,7 +96,7 @@ export const useAppLocale = () => {
       no_expenses_data: 'ยังไม่มีรายการค่าใช้จ่าย',
 
       // --- Page: Timeline (ไทม์ไลน์) ---
-      timeline_title: 'กำหนดการ (Timeline)',
+      timeline_title: 'กำหนดการ ',
       timeline_subtitle: 'จัดการลำดับกิจกรรมแบบเรียลไทม์',
       add_day: 'เพิ่มวัน',
       start_timeline: 'เริ่มต้นสร้างกำหนดการ',
