@@ -1,7 +1,7 @@
 <script setup>
 import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
-import EventFabButton from '~/components/event/EventFabButton.vue'
+
 import { useEventDetailsApi } from '~/composables/useEventDetailsApi'
 import { useAppLocale } from '~/composables/useAppLocale'
 
@@ -48,8 +48,7 @@ const handleDelete = (id) => { if(confirm(t.value.confirm_delete_task)) deleteTa
       </div>
     </div>
 
-    <template #fab><EventFabButton @click="openCreate" class="fixed bottom-24 right-8" /></template>
-
+    
     <div v-if="isModalOpen" class="fixed inset-0 flex items-start justify-center p-4 pt-20 z-[100] bg-black/60 backdrop-blur-sm">
       <div class="w-full max-w-md bg-white rounded-xl p-6 space-y-4 shadow-xl">
         <h3 class="text-xl font-bold">{{ t.add_task }}</h3>

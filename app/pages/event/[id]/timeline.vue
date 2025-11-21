@@ -3,7 +3,7 @@ import { ref, onMounted } from 'vue'
 import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
 import UiTextarea from '~/components/ui/UiTextarea.vue'
-import EventFabButton from '~/components/event/EventFabButton.vue'
+// ตัด EventFabButton ออกจากการ import เพราะไม่ได้ใช้แล้ว
 import { useTimelineApi } from '~/composables/useTimelineApi'
 import { useAppLocale } from '~/composables/useAppLocale'
 
@@ -220,9 +220,8 @@ const availableIcons = ['📝','🎤','☕','🍔','🗣️','🤝','🎉','🚌
         </footer>
       </div>
     </div>
-
-    <template #fab><EventFabButton class="fixed bottom-8 right-8 shadow-2xl z-50" /></template>
-  </NuxtLayout>
+    
+    </NuxtLayout>
 </template>
 
 <style scoped>

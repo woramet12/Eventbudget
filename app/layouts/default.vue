@@ -26,7 +26,7 @@ const toggleSidebar = () => {
 
           <div class="flex items-center gap-3 select-none">
             <div class="w-9 h-9 bg-gradient-to-br from-accent to-orange-600 rounded-xl flex items-center justify-center text-white shadow-lg shadow-orange-200 transform -rotate-3">
-              <span class="font-bold text-lg">E</span>
+              <span class="font-bold text-lg">EB</span>
             </div>
             <h1 class="text-xl font-extrabold tracking-tight text-gray-900">
               <slot name="header-title">
