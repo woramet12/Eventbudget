@@ -1,58 +1,66 @@
 <script setup>
 defineProps({ event: Object })
 
-// Logic เดิม: ฟังก์ชันจัดรูปแบบเงิน
+// จัดรูปแบบเงิน (เช่น ฿50,000)
 const formatCurrency = (amount) => {
-  if (!amount && amount !== 0) return 'N/A'
+  if (!amount && amount !== 0) return '-'
   return new Intl.NumberFormat('th-TH', { style: 'currency', currency: 'THB', maximumFractionDigits: 0 }).format(amount)
+}
+
+// จัดรูปแบบวันที่ (เช่น 12 ม.ค. 67)
+const formatDate = (dateStr) => {
+  if (!dateStr) return '-'
+  const date = new Date(dateStr)
+  return new Intl.DateTimeFormat('th-TH', { dateStyle: 'medium' }).format(date)
 }
 </script>
 
 <template>
   <div 
-    class="group relative bg-white rounded-xl shadow-sm hover:shadow-lg border border-gray-100 
-           transition-all duration-300 cursor-pointer overflow-hidden transform hover:-translate-y-1"
+    class="group relative bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-lg hover:border-orange-100 transition-all duration-300 cursor-pointer overflow-hidden flex flex-col h-full"
   >
-    <div class="absolute left-0 top-0 bottom-0 w-1.5 bg-accent transition-all duration-300 group-hover:w-2"></div>
+    <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-orange-400 to-accent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
-    <div class="p-5 pl-7">
-      <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
+    <div class="p-4 flex flex-col h-full">
+      <div class="flex justify-between items-start gap-3 mb-3">
+        <h3 class="text-base font-bold text-gray-800 group-hover:text-accent transition-colors leading-tight line-clamp-2">
+          {{ event.name }}
+        </h3>
         
-        <div class="space-y-2">
-          <h3 class="text-lg font-bold text-gray-800 group-hover:text-accent transition-colors duration-200 leading-tight">
-            {{ event.name }}
-          </h3>
-          
-          <div class="flex items-center flex-wrap gap-x-4 gap-y-2 text-sm text-gray-500">
-            <div class="flex items-center gap-1.5">
-               <span class="p-1 bg-blue-50 text-blue-500 rounded-full text-xs">👤</span>
-               <span>{{ event.client_name || 'ไม่ระบุลูกค้า' }}</span>
-            </div>
-            <div v-if="event.location" class="flex items-center gap-1.5">
-               <span class="p-1 bg-red-50 text-red-500 rounded-full text-xs">📍</span>
-               <span>{{ event.location }}</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="flex flex-row md:flex-col items-center md:items-end gap-2 md:gap-1.5 mt-2 md:mt-0">
-          <div class="flex items-center gap-1.5 px-3 py-1 bg-gray-50 rounded-lg border border-gray-100 text-xs font-medium text-gray-600">
-            <span>📅</span>
-            {{ event.start_date || 'ไม่ระบุวันที่' }}
-          </div>
-          
-          <div v-if="event.total_budget" 
-               class="flex items-center gap-1.5 px-3 py-1 bg-green-50 rounded-lg border border-green-100 text-xs font-bold text-green-700">
-            <span>💰</span>
-            {{ formatCurrency(event.total_budget) }}
-          </div>
-        </div>
-
+        <svg class="w-4 h-4 text-gray-300 group-hover:text-accent transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
       </div>
-    </div>
-    
-    <div class="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 translate-x-4 group-hover:translate-x-0 transition-all duration-300">
-        <svg class="w-6 h-6 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+
+      <div class="space-y-2 mb-4 flex-1">
+        <div class="flex items-center gap-2 text-xs text-gray-600">
+           <span class="w-5 h-5 flex items-center justify-center bg-blue-50 text-blue-500 rounded-full flex-shrink-0">
+             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
+           </span>
+           <span class="truncate font-medium">{{ event.client_name || 'ไม่ระบุลูกค้า' }}</span>
+        </div>
+        
+        <div class="flex items-center gap-2 text-xs text-gray-500">
+           <span class="w-5 h-5 flex items-center justify-center bg-red-50 text-red-500 rounded-full flex-shrink-0">
+             <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+           </span>
+           <span class="truncate">{{ event.location || 'ไม่ระบุสถานที่' }}</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between pt-3 border-t border-gray-50 mt-auto">
+        <div class="flex items-center gap-1.5 text-[11px] font-medium text-gray-500 bg-gray-50 px-2 py-1 rounded-md border border-gray-100">
+           <svg class="w-3 h-3 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+           {{ formatDate(event.start_date) }}
+        </div>
+
+        <div v-if="event.total_budget" class="text-sm font-bold text-gray-800 tabular-nums">
+           {{ formatCurrency(event.total_budget) }}
+        </div>
+        <div v-else class="text-xs text-gray-300 italic">
+           -
+        </div>
+      </div>
     </div>
   </div>
 </template>

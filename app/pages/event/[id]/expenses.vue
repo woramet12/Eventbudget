@@ -108,7 +108,12 @@ const handleDelete = (id) => {
       </div>
     </div>
 
-    <template #fab><EventFabButton @click="openCreate" class="fixed bottom-8 right-8 shadow-xl z-50" /></template>
+    <template #fab>
+      <EventFabButton 
+        @click="openCreate" 
+        class="fixed bottom-24 right-4 md:bottom-8 md:right-8 shadow-xl z-50 transition-all duration-300" 
+      />
+    </template>
 
     <div v-if="isModalOpen" class="fixed inset-0 flex items-center sm:items-start justify-center p-4 sm:pt-20 z-[100] bg-black/60 backdrop-blur-sm">
       <div class="w-full max-w-md bg-white text-text-primary rounded-2xl shadow-2xl flex flex-col">
