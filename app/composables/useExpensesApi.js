@@ -48,13 +48,15 @@ export const useExpensesApi = () => {
 
   // 4. อัปเดต (Update)
   const updateExpense = async (updatedExpense) => {
-    // ถ้ามี API PUT ให้เปิดบรรทัดนี้
-    // await $fetch('/api/expenses', { method: 'PUT', body: updatedExpense })
+    // ✅ เปิดใช้งาน: ส่งข้อมูลไปบันทึกที่ Server ผ่าน API PUT
+    await $fetch('/api/expenses', { method: 'PUT', body: updatedExpense })
+    
+    // อัปเดต State ในหน้าจอทันที (Optimistic Update)
     const index = expenses.value.findIndex(e => e.id === updatedExpense.id)
     if (index !== -1) expenses.value[index] = updatedExpense
   }
 
-  // 5. ✅ ฟังก์ชันที่หายไป: คำนวณยอดตามหมวดหมู่ (สำหรับหน้า Budget)
+  // 5. คำนวณยอดตามหมวดหมู่ (สำหรับหน้า Budget)
   const getExpensesByCategory = (eventId) => {
     // กรองเฉพาะ event นี้
     const eventExpenses = expenses.value.filter(e => e.eventId === Number(eventId))
@@ -84,6 +86,6 @@ export const useExpensesApi = () => {
     addExpense,
     removeExpense,
     updateExpense,
-    getExpensesByCategory // ✅ Export กลับมาแล้ว
+    getExpensesByCategory
   }
 }

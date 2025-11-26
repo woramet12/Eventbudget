@@ -45,9 +45,7 @@ const getAvatarColor = (name) => {
 </script>
 
 <template>
-  <NuxtLayout name="default">
-    <template #header-title>{{ t.team_management }}</template>
-    
+  <div class="min-h-screen p-4 sm:p-6 bg-gray-50/30">
     <div class="max-w-6xl mx-auto pb-24">
       
       <div class="mb-8">
@@ -100,9 +98,7 @@ const getAvatarColor = (name) => {
       </div>
     </div>
     
-    <template #fab>
-      <EventFabButton @click="openCreate" class="fixed bottom-8 right-8 z-40 shadow-xl shadow-accent/30" />
-    </template>
+    <EventFabButton @click="openCreate" class="fixed bottom-8 right-8 z-40 shadow-xl shadow-accent/30" />
 
     <Teleport to="body">
       <Transition
@@ -138,8 +134,7 @@ const getAvatarColor = (name) => {
         </div>
       </Transition>
     </Teleport>
-
-  </NuxtLayout>
+  </div>
 </template>
 
 <style scoped>

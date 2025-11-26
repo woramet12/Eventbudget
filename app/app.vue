@@ -1,7 +1,6 @@
 <script setup>
 import { onMounted } from 'vue'
 
-// Logic โหลดรูปพื้นหลัง (ถ้ามี)
 onMounted(() => {
   const savedBg = localStorage.getItem('app_bg_image')
   if (savedBg) {
@@ -15,6 +14,9 @@ onMounted(() => {
 
 <template>
   <div>
-    <NuxtPage />
+    <NuxtLoadingIndicator color="#f97316" />
+    <NuxtLayout>
+      <NuxtPage />
+    </NuxtLayout>
   </div>
 </template>

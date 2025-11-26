@@ -7,6 +7,9 @@ import EventFabButton from '~/components/event/EventFabButton.vue'
 import { useSettingsApi } from '~/composables/useSettingsApi'
 import { useAppLocale } from '~/composables/useAppLocale'
 
+// ✅ กำหนด Title ของหน้า
+definePageMeta({ title: 'การจัดการสกุลเงิน' })
+
 const { t } = useAppLocale()
 const { currencies, createCurrency, updateCurrency, deleteCurrency } = useSettingsApi()
 const isModalOpen = ref(false)
@@ -39,17 +42,24 @@ const handleDelete = (item) => {
 </script>
 
 <template>
-  <NuxtLayout name="default">
-    <template #header-title>{{ t.currency_management }}</template>
-    
-    <div class="max-w-6xl mx-auto pb-24">
+  <!-- ✅ เริ่มต้นด้วย div (ไม่มี NuxtLayout) -->
+  <div class="max-w-6xl mx-auto pb-24 px-4 sm:px-0 pt-6">
       
       <div class="mb-8">
         <h2 class="text-2xl font-bold text-gray-900">{{ t.currency_management }}</h2>
         <p class="text-gray-500 text-sm mt-1">จัดการอัตราแลกเปลี่ยนและสกุลเงินหลักของระบบ</p>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      <!-- ✅ v-if เช็คว่ามีข้อมูลไหม -->
+      <div v-if="!currencies || currencies.length === 0" class="flex flex-col items-center justify-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200 text-center">
+         <div class="w-20 h-20 bg-gray-50 rounded-full flex items-center justify-center text-4xl mb-4 shadow-inner">💱</div>
+         <h3 class="text-lg font-bold text-gray-900 mb-2">ยังไม่มีสกุลเงิน</h3>
+         <p class="text-gray-500 mb-6 text-sm">เพิ่มสกุลเงินแรกของคุณเพื่อเริ่มใช้งาน</p>
+         <UiButton variant="primary" @click="openCreate">เพิ่มสกุลเงิน</UiButton>
+      </div>
+
+      <!-- ✅ v-else แสดงรายการ (ต้องอยู่ติดกับ v-if ห้ามมีอะไรคั่น) -->
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
         <div 
           v-for="cur in currencies" 
           :key="cur.id" 
@@ -99,11 +109,9 @@ const handleDelete = (item) => {
           </div>
         </div>
       </div>
-    </div>
     
-    <template #fab>
-      <EventFabButton @click="openCreate" class="fixed bottom-8 right-8 z-40 shadow-xl shadow-accent/30" />
-    </template>
+    <!-- ปุ่ม FAB ย้ายมาอยู่นอก v-if/v-else แต่อยู่ใน div หลัก -->
+    <EventFabButton @click="openCreate" class="fixed bottom-8 right-8 z-40 shadow-xl shadow-accent/30" />
 
     <Teleport to="body">
       <Transition
@@ -155,7 +163,7 @@ const handleDelete = (item) => {
       </Transition>
     </Teleport>
 
-  </NuxtLayout>
+  </div>
 </template>
 
 <style scoped>

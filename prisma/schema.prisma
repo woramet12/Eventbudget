@@ -32,18 +32,24 @@ model Event {
   tasks             Task[]
 }
 
-// 2. ค่าใช้จ่าย
+// 2. ค่าใช้จ่าย (อัปเกรด)
 model Expense {
-  id          Int      @id @default(autoincrement())
-  name        String
-  amount      Float
-  date        String?
-  time        String?
-  category    String?
-  icon        String?
+  id               Int      @id @default(autoincrement())
+  name             String
+  amount           Float
   
-  eventId     Int
-  event       Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  // --- [New Features] ---
+  estimated_amount Float?   @default(0) // ราคาประเมิน (Plan)
+  is_paid          Boolean  @default(false) // จ่ายเงินหรือยัง
+  // ----------------------
+
+  date             String?
+  time             String?
+  category         String?
+  icon             String?
+  
+  eventId          Int
+  event            Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
 
 // 3. วันใน Timeline
@@ -88,4 +94,15 @@ model Category {
   id        Int      @id @default(autoincrement())
   name      String
   icon      String?
+}
+
+// 7. ผู้ใช้งาน (User)
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String   // เก็บแบบ Hash (เข้ารหัสแล้ว)
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

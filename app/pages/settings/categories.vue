@@ -39,10 +39,10 @@ const handleDelete = (item) => {
 </script>
 
 <template>
-  <NuxtLayout name="default">
-    <template #header-title>{{ t.settings_categories }}</template>
-    
-    <div class="max-w-5xl mx-auto pb-24">
+  <!-- ❌ ลบ <NuxtLayout> ที่ครอบอยู่ออก -->
+  <!-- ✅ เริ่มต้นด้วย div เนื้อหาได้เลย -->
+  
+  <div class="max-w-5xl mx-auto pb-24 pt-6 px-4 sm:px-0">
       
       <div class="mb-8">
         <h2 class="text-2xl font-bold text-gray-900">{{ t.settings_categories }}</h2>
@@ -68,7 +68,7 @@ const handleDelete = (item) => {
             </div>
             <div>
               <h3 class="font-bold text-gray-900 group-hover:text-accent transition-colors">{{ cat.name }}</h3>
-              <p class="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Category</p>
+              <p class="text-xs text-gray-400 font-medium uppercase tracking-wider">Category</p>
             </div>
           </div>
 
@@ -90,60 +90,58 @@ const handleDelete = (item) => {
           </div>
         </div>
       </div>
-    </div>
-    
-    <template #fab>
+      
+      <!-- ปุ่ม FAB ย้ายออกมาวางตรงนี้ (ไม่ต้องใส่ใน template #fab เพราะเราเอา Layout ออกแล้ว) -->
       <EventFabButton @click="openCreate" class="fixed bottom-8 right-8 z-40 shadow-xl shadow-accent/30" />
-    </template>
 
-    <Teleport to="body">
-      <Transition
-        enter-active-class="transition duration-200 ease-out"
-        enter-from-class="opacity-0"
-        enter-to-class="opacity-100"
-        leave-active-class="transition duration-150 ease-in"
-        leave-from-class="opacity-100"
-        leave-to-class="opacity-0"
-      >
-        <div v-if="isModalOpen" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
-          <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" @click="isModalOpen = false"></div>
+      <Teleport to="body">
+        <Transition
+          enter-active-class="transition duration-200 ease-out"
+          enter-from-class="opacity-0"
+          enter-to-class="opacity-100"
+          leave-active-class="transition duration-150 ease-in"
+          leave-from-class="opacity-100"
+          leave-to-class="opacity-0"
+        >
+          <div v-if="isModalOpen" class="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+            <div class="fixed inset-0 bg-gray-900/40 backdrop-blur-sm transition-opacity" @click="isModalOpen = false"></div>
 
-          <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6 animate-scale-up">
-            <div class="text-center mb-6">
-              <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-sm">
-                {{ form.icon || '✨' }}
+            <div class="relative w-full max-w-sm bg-white rounded-2xl shadow-2xl p-6 animate-scale-up">
+              <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center text-3xl mx-auto mb-3 shadow-sm">
+                  {{ form.icon || '✨' }}
+                </div>
+                <h3 class="text-xl font-bold text-gray-900">{{ isEditing ? t.settings_edit_category : t.settings_add_category }}</h3>
               </div>
-              <h3 class="text-xl font-bold text-gray-900">{{ isEditing ? t.settings_edit_category : t.settings_add_category }}</h3>
-            </div>
-            
-            <div class="space-y-4">
-              <UiInput v-model="form.name" :label="t.label_cat_name" placeholder="เช่น ค่าเดินทาง, ค่าอาหาร" />
               
-              <div>
-                <label class="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">{{ t.label_cat_icon }}</label>
-                <div class="flex gap-3">
-                  <input 
-                    v-model="form.icon" 
-                    class="w-14 text-center px-2 py-2.5 bg-white border border-gray-200 rounded-xl text-xl focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
-                    placeholder="🍔"
-                  />
-                  <div class="flex-1 text-xs text-gray-400 flex items-center bg-gray-50 rounded-xl px-3 leading-tight">
-                    พิมพ์ Emoji หรือตัวอักษรเพื่อใช้เป็นไอคอน
+              <div class="space-y-4">
+                <UiInput v-model="form.name" :label="t.label_cat_name" placeholder="เช่น ค่าเดินทาง, ค่าอาหาร" />
+                
+                <div>
+                  <label class="block text-sm font-semibold text-gray-700 mb-1.5 ml-1">{{ t.label_cat_icon }}</label>
+                  <div class="flex gap-3">
+                    <input 
+                      v-model="form.icon" 
+                      class="w-14 text-center px-2 py-2.5 bg-white border border-gray-200 rounded-xl text-xl focus:outline-none focus:border-accent focus:ring-2 focus:ring-accent/20 transition-all"
+                      placeholder="🍔"
+                    />
+                    <div class="flex-1 text-xs text-gray-400 flex items-center bg-gray-50 rounded-xl px-3 leading-tight">
+                      พิมพ์ Emoji หรือตัวอักษรเพื่อใช้เป็นไอคอน
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-gray-100">
-              <UiButton variant="secondary" @click="isModalOpen = false" class="flex-1 justify-center">{{ t.cancel }}</UiButton>
-              <UiButton variant="primary" @click="handleSave" class="flex-1 justify-center">{{ t.save }}</UiButton>
+              <div class="flex justify-end gap-3 mt-8 pt-4 border-t border-gray-100">
+                <UiButton variant="secondary" @click="isModalOpen = false" class="flex-1 justify-center">{{ t.cancel }}</UiButton>
+                <UiButton variant="primary" @click="handleSave" class="flex-1 justify-center">{{ t.save }}</UiButton>
+              </div>
             </div>
           </div>
-        </div>
-      </Transition>
-    </Teleport>
+        </Transition>
+      </Teleport>
 
-  </NuxtLayout>
+  </div>
 </template>
 
 <style scoped>

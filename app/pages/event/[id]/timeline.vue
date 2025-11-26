@@ -1,9 +1,11 @@
 <script setup>
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
 import UiTextarea from '~/components/ui/UiTextarea.vue'
-// ตัด EventFabButton ออกจากการ import เพราะไม่ได้ใช้แล้ว
+// นำเข้า EventBottomNav ตาม path ที่ระบุ
+import EventBottomNav from '~/components/layout/EventBottomNav.vue'
 import { useTimelineApi } from '~/composables/useTimelineApi'
 import { useAppLocale } from '~/composables/useAppLocale'
 
@@ -78,8 +80,8 @@ const availableIcons = ['📝','🎤','☕','🍔','🗣️','🤝','🎉','🚌
 </script>
 
 <template>
-  <NuxtLayout name="event">
-    <div class="max-w-5xl mx-auto py-8 px-4 sm:px-6">
+  <div class="min-h-screen bg-gray-50/30">
+    <div class="max-w-5xl mx-auto py-8 px-4 sm:px-6 pb-24">
       
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
         <div>
@@ -169,6 +171,8 @@ const availableIcons = ['📝','🎤','☕','🍔','🗣️','🤝','🎉','🚌
         </transition>
       </div>
     </div>
+    
+    <EventBottomNav :eventId="eventId" />
 
     <div v-if="isDayModalOpen" class="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-gray-900/60 backdrop-blur-sm transition-opacity">
       <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl p-8 animate-scale-up">
@@ -221,7 +225,7 @@ const availableIcons = ['📝','🎤','☕','🍔','🗣️','🤝','🎉','🚌
       </div>
     </div>
     
-    </NuxtLayout>
+  </div>
 </template>
 
 <style scoped>
