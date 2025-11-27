@@ -3,6 +3,9 @@ import UiCard from '~/components/ui/UiCard.vue'
 import BudgetChart from '~/components/budget/BudgetChart.vue'
 import { useAppLocale } from '~/composables/useAppLocale'
 import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+import { useEventsApi } from '~/composables/useEventsApi'
+import { useExpensesApi } from '~/composables/useExpensesApi'
 
 // ✅ บอก Nuxt ว่าหน้านี้ใช้ layout 'event'
 definePageMeta({
@@ -12,32 +15,46 @@ definePageMeta({
 const { t } = useAppLocale()
 const route = useRoute()
 const { getEventById } = useEventsApi()
-const { getExpensesByEventId, getExpensesByCategory } = useExpensesApi()
+const { getExpensesByEventId } = useExpensesApi()
 
 const eventId = route.params.id
 const event = getEventById(eventId)
 
 const budget = computed(() => Number(event.value?.total_budget) || 0)
 const eventExpenses = getExpensesByEventId(eventId)
+
 const used = computed(() => eventExpenses.value.reduce((sum, item) => sum + Number(item.amount), 0))
 const paid = computed(() => eventExpenses.value.filter(item => item.is_paid).reduce((sum, item) => sum + Number(item.amount), 0))
 const remaining = computed(() => budget.value - used.value)
 const pending = computed(() => used.value - paid.value)
-const usedPercent = computed(() => budget.value === 0 ? 0 : Math.min(100, (used.value / budget.value) * 100))
-const paidPercent = computed(() => used.value === 0 ? 0 : Math.min(100, (paid.value / used.value) * 100))
-const categories = computed(() => getExpensesByCategory(eventId))
 
-const formatMoney = (val) => val.toLocaleString('th-TH', { maximumFractionDigits: 0 })
+const usedPercent = computed(() => budget.value === 0 ? 0 : Math.min(100, (used.value / budget.value) * 100))
+const paidPercent = computed(() => budget.value === 0 ? 0 : Math.min(100, (paid.value / budget.value) * 100))
+
+const formatMoney = (amount) => {
+  return Number(amount).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })
+}
+
+const categories = computed(() => {
+  const cats = {}
+  eventExpenses.value.forEach(e => {
+    if (!cats[e.category]) {
+      cats[e.category] = { name: e.category, amount: 0, icon: '📝' }
+    }
+    cats[e.category].amount += Number(e.amount)
+  })
+  return Object.values(cats).sort((a, b) => b.amount - a.amount)
+})
 </script>
 
 <template>
-  <div class="max-w-6xl mx-auto py-2 sm:py-6 px-0 sm:px-4">
-      
-      <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6 flex items-center gap-2 px-4 sm:px-0">
+  <div class="min-h-screen bg-gray-50/30">
+    <div class="w-full py-6 px-4 sm:px-6 pb-24">
+      <h2 class="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
         <span>📊</span> {{ t.budget_overview }}
       </h2>
 
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4 mb-6 px-4 sm:px-0">
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
         <UiCard class="p-4 sm:p-5 border-l-4 border-l-blue-500 relative overflow-hidden shadow-sm">
           <p class="text-xs text-gray-500 uppercase font-bold tracking-wider mb-1">{{ t.total_budget }}</p>
           <p class="text-xl sm:text-2xl font-bold text-gray-800">฿{{ formatMoney(budget) }}</p>
@@ -138,5 +155,6 @@ const formatMoney = (val) => val.toLocaleString('th-TH', { maximumFractionDigits
         </div>
       </UiCard>
 
+    </div>
   </div>
 </template>

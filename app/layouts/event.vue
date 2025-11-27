@@ -34,13 +34,13 @@ const toggleSidebar = () => isSidebarOpen.value = !isSidebarOpen.value
     
     <AppSidebar :isOpen="isSidebarOpen" @close="toggleSidebar" />
 
-    <div class="md:pl-72 transition-all duration-300">
+    <div class="transition-all duration-300">
       
       <header class="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-gray-200 transition-all">
         <div class="flex flex-col">
           <div class="h-16 px-4 flex items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-              <button @click="toggleSidebar" class="md:hidden p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-lg">
+              <button @click="toggleSidebar" class="p-2 -ml-2 text-gray-500 hover:bg-gray-100 rounded-lg">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"></path></svg>
               </button>
               
@@ -67,7 +67,7 @@ const toggleSidebar = () => isSidebarOpen.value = !isSidebarOpen.value
         </div>
       </header>
 
-      <main class="p-4 md:p-8 max-w-7xl mx-auto min-h-[calc(100vh-140px)]">
+      <main class="p-4 md:p-8 w-full min-h-[calc(100vh-140px)]">
         <slot />
       </main>
       

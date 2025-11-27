@@ -29,7 +29,7 @@ const formatCurrency = (amount) => {
 
 <template>
   <div>
-    <div class="flex items-center gap-3 mb-6">
+    <div class="flex flex-wrap items-center gap-3 mb-6">
       <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shadow-sm">
         📝
       </div>
@@ -43,7 +43,7 @@ const formatCurrency = (amount) => {
       {{ t.loading }}
     </div>
 
-    <UiCard v-else class="p-6 animate-fade-in">
+    <UiCard v-else class="p-4 sm:p-6 animate-fade-in">
       <div class="mb-6">
         <h2 class="text-2xl font-bold text-text-primary mb-2">{{ event.name }}</h2>
         <p class="text-text-secondary whitespace-pre-line">{{ event.description || t.no_desc }}</p>

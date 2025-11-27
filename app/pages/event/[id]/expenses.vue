@@ -1,4 +1,3 @@
-
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -102,28 +101,26 @@ const handleSave = () => {
 const handleDelete = (id) => {
   if(confirm('คุณแน่ใจหรือไม่ที่จะลบรายการนี้?')) {
     removeExpense(id)
-    isModalOpen.value = false
   }
 }
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50/30">
-    <div class="max-w-4xl mx-auto pb-24 pt-6">
-
-      <!-- ❌ ลบ div นี้ออก เพราะ Layout มีแถบเมนูให้แล้ว -->
-      <!-- <div class="hidden sm:block mb-8 border-b border-gray-200">
-        <EventSubNav :eventId="eventId" />
-      </div> -->
-      
-      <div class="flex items-center gap-3 mb-6">
-        <div class="w-12 h-12 rounded-2xl bg-orange-100 text-accent flex items-center justify-center text-2xl shadow-sm">
-          🧾
+    <div class="w-full py-6 px-4 sm:px-6 pb-24">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shadow-sm">
+            💸
+          </div>
+          <div>
+            <h2 class="text-2xl font-bold text-gray-900">{{ t.expenses_title }}</h2>
+            <p class="text-sm text-gray-500">จัดการและติดตามรายจ่ายทั้งหมดในงานนี้</p>
+          </div>
         </div>
-        <div>
-          <h2 class="text-2xl font-bold text-gray-900">{{ t.expenses_title }}</h2>
-          <p class="text-sm text-gray-500">จัดการและติดตามรายจ่ายทั้งหมดในงานนี้</p>
-        </div>
+        <UiButton variant="primary" @click="openCreate" class="hidden md:flex shadow-md">
+           <span class="mr-2">+</span> เพิ่มรายการ
+        </UiButton>
       </div>
 
       <div class="bg-white rounded-2xl p-6 shadow-sm border border-gray-100 mb-8">
@@ -138,10 +135,10 @@ const handleDelete = (id) => {
         <div class="w-full bg-gray-100 rounded-full h-4 mb-4 overflow-hidden relative shadow-inner">
           <div class="h-full rounded-full transition-all duration-700 ease-out shadow-sm" :class="totalActual > totalEstimated ? 'bg-gradient-to-r from-red-400 to-red-600' : 'bg-gradient-to-r from-green-400 to-green-600'" :style="{ width: `${budgetHealth}%` }"></div>
         </div>
-        <div class="flex justify-between text-sm pt-2 border-t border-gray-50">
-          <div class="text-center w-1/3 border-r border-gray-50"><p class="text-xs text-gray-400 mb-1">ตั้งงบไว้ (Plan)</p><p class="font-bold text-gray-700">฿{{ totalEstimated.toLocaleString() }}</p></div>
-          <div class="text-center w-1/3 border-r border-gray-50"><p class="text-xs text-gray-400 mb-1">ใช้จริง (Actual)</p><p class="font-bold text-blue-600">฿{{ totalActual.toLocaleString() }}</p></div>
-          <div class="text-center w-1/3"><p class="text-xs text-gray-400 mb-1">จ่ายแล้ว (Paid)</p><p class="font-bold text-green-600">฿{{ totalPaid.toLocaleString() }}</p></div>
+        <div class="flex flex-wrap justify-between text-sm pt-2 border-t border-gray-50 gap-y-2">
+          <div class="text-center w-1/3 min-w-[80px] border-r border-gray-50"><p class="text-xs text-gray-400 mb-1">ตั้งงบไว้ (Plan)</p><p class="font-bold text-gray-700">฿{{ totalEstimated.toLocaleString() }}</p></div>
+          <div class="text-center w-1/3 min-w-[80px] border-r border-gray-50"><p class="text-xs text-gray-400 mb-1">ใช้จริง (Actual)</p><p class="font-bold text-blue-600">฿{{ totalActual.toLocaleString() }}</p></div>
+          <div class="text-center w-1/3 min-w-[80px]"><p class="text-xs text-gray-400 mb-1">จ่ายแล้ว (Paid)</p><p class="font-bold text-green-600">฿{{ totalPaid.toLocaleString() }}</p></div>
         </div>
       </div>
 
@@ -194,7 +191,7 @@ const handleDelete = (id) => {
       </div>
     </div>
     
-    <EventFabButton @click="openCreate" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 shadow-xl z-50 hover:scale-110 transition-transform" />
+    <EventFabButton @click="openCreate" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 shadow-xl z-50 hover:scale-110 transition-transform md:hidden" />
     <EventBottomNav :eventId="eventId" />
 
     <!-- Modal -->
@@ -228,7 +225,7 @@ const handleDelete = (id) => {
 
           <div>
             <label class="text-sm font-semibold text-gray-700 mb-3 block ml-1">หมวดหมู่</label>
-            <div class="grid grid-cols-4 gap-3">
+            <div class="grid grid-cols-3 sm:grid-cols-4 gap-3">
               <button v-for="cat in categories" :key="cat.name" @click="form.category = cat.name"
                 class="flex flex-col items-center justify-center py-3 px-1 rounded-xl border transition-all duration-200 aspect-square"
                 :class="form.category === cat.name ? 'border-accent bg-orange-50 text-accent ring-2 ring-orange-100 shadow-sm translate-y-[-2px]' : 'border-gray-100 bg-white hover:bg-gray-50 hover:border-gray-300 text-gray-600'"

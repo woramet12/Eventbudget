@@ -60,14 +60,14 @@ const handleSaveItem = () => {
   isEditing.value ? updateItem(activeDayId.value, payload) : addItem(activeDayId.value, payload)
   isModalOpen.value = false
 }
-const handleDeleteItem = (dayId, itemId) => { if(confirm(t.value.confirm_delete_activity_msg)) deleteItem(dayId, itemId) }
-const availableIcons = ['📝','🎤','☕','🍔','🗣️','🤝','🎉','🚌','🏨','💻','🎨','📍','📸','🏆','🎵']
+
+const availableIcons = ['📍', '🍽️', '🚗', '🏨', '📸', '🎉', '🛍️', '🎵', '🏋️', '💤']
+const handleDeleteItem = (dayId, itemId) => { if(confirm(t.value.confirm_delete_item_msg)) deleteItem(dayId, itemId) }
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50/30">
-    <div class="max-w-5xl mx-auto py-6 px-4 sm:px-6 pb-24">
-      
+    <div class="w-full py-6 px-4 sm:px-6 pb-24">
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
         <div>
           <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ t.timeline_title }}</h2>
@@ -157,7 +157,7 @@ const availableIcons = ['📝','🎤','☕','🍔','🗣️','🤝','🎉','🚌
       </div>
     </div>
     
-    <EventFabButton @click="openAddDay" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 shadow-xl z-50 hover:scale-110 transition-transform" />
+    <EventFabButton @click="openAddDay" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 shadow-xl z-50 hover:scale-110 transition-transform md:hidden" />
     
     <EventBottomNav :eventId="eventId" />
 

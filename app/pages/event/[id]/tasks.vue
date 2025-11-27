@@ -22,15 +22,27 @@ const tasks = getTasksByEvent(eventId)
 const isModalOpen = ref(false)
 const form = ref({ title: '', description: '', due_date: '' })
 
-const openCreate = () => { form.value = { title: '', description: '', due_date: '' }; isModalOpen.value = true }
-const handleSave = () => { createTask({ ...form.value, event_id: eventId }); isModalOpen.value = false }
-const handleDelete = (id) => { if(confirm(t.value.confirm_delete_task)) deleteTask(id) }
+const openCreate = () => {
+  form.value = { title: '', description: '', due_date: '' }
+  isModalOpen.value = true
+}
+
+const handleSave = async () => {
+  if (!form.value.title) return alert(t.value.warning_fill_all || 'กรุณากรอกข้อมูลให้ครบ')
+  await createTask({ ...form.value, event_id: Number(eventId) })
+  isModalOpen.value = false
+}
+
+const handleDelete = async (id) => {
+  if (confirm(t.value.confirm_delete || 'คุณแน่ใจหรือไม่?')) {
+    await deleteTask(id)
+  }
+}
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50/30">
-    <div class="max-w-3xl mx-auto py-6 px-4 sm:px-6 pb-24">
-      
+    <div class="w-full py-6 px-4 sm:px-6 pb-24">
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-bold text-gray-900">{{ t.tasks_title }}</h2>
         <UiButton variant="primary" @click="openCreate" class="hidden sm:flex shadow-md">
@@ -63,7 +75,7 @@ const handleDelete = (id) => { if(confirm(t.value.confirm_delete_task)) deleteTa
       </div>
     </div>
 
-    <EventFabButton @click="openCreate" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 shadow-xl z-50 hover:scale-110 transition-transform" />
+    <EventFabButton @click="openCreate" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 shadow-xl z-50 hover:scale-110 transition-transform md:hidden" />
     <EventBottomNav :eventId="eventId" />
     
     <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center p-4 z-[100]">
@@ -92,4 +104,4 @@ const handleDelete = (id) => { if(confirm(t.value.confirm_delete_task)) deleteTa
 <style scoped>
 .animate-scale-up { animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-</style> 
+</style>
