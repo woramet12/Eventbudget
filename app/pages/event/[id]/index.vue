@@ -29,6 +29,16 @@ const formatCurrency = (amount) => {
 
 <template>
   <div>
+    <div class="flex items-center gap-3 mb-6">
+      <div class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl shadow-sm">
+        📝
+      </div>
+      <div>
+        <h2 class="text-2xl font-bold text-gray-900">{{ t.event_details_header }}</h2>
+        <p class="text-sm text-gray-500">{{ t.event_details_sub }}</p>
+      </div>
+    </div>
+
     <div v-if="!event" class="p-8 text-center text-gray-500 animate-pulse">
       {{ t.loading }}
     </div>

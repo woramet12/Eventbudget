@@ -4,10 +4,15 @@ import { useRoute } from 'vue-router'
 import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
 import UiTextarea from '~/components/ui/UiTextarea.vue'
-// นำเข้า EventBottomNav ตาม path ที่ระบุ
 import EventBottomNav from '~/components/layout/EventBottomNav.vue'
+import EventFabButton from '~/components/event/EventFabButton.vue'
 import { useTimelineApi } from '~/composables/useTimelineApi'
 import { useAppLocale } from '~/composables/useAppLocale'
+
+// ✅ เรียกใช้ Layout 'event'
+definePageMeta({
+  layout: 'event'
+})
 
 const { t } = useAppLocale()
 const route = useRoute()
@@ -17,6 +22,7 @@ const { getTimelineByEventId, addDay, deleteDay, addItem, updateItem, deleteItem
 const timelineData = getTimelineByEventId(eventId)
 const openDays = ref([])
 
+// ... (Logic เดิม) ...
 const toggleDay = (dayId) => {
   if (openDays.value.includes(dayId)) {
     openDays.value = openDays.value.filter(id => id !== dayId)
@@ -38,57 +44,36 @@ const form = ref({ id: null, start_time: '', end_time: '', title: '', descriptio
 const isDayModalOpen = ref(false)
 const dayForm = ref({ date: '', title: '' })
 
-const openAddDay = () => {
-  dayForm.value = { date: '', title: '' }
-  isDayModalOpen.value = true
-}
+const openAddDay = () => { dayForm.value = { date: '', title: '' }; isDayModalOpen.value = true }
 const handleSaveDay = () => {
   if (!dayForm.value.date || !dayForm.value.title) return alert(t.value.warning_fill_all)
   addDay({ event_id: Number(eventId), date: dayForm.value.date, title: dayForm.value.title })
-  setTimeout(() => {
-      const newDay = timelineData.value[timelineData.value.length - 1]
-      if (newDay) openDays.value.push(newDay.id)
-  }, 100)
+  setTimeout(() => { const newDay = timelineData.value[timelineData.value.length - 1]; if (newDay) openDays.value.push(newDay.id) }, 100)
   isDayModalOpen.value = false
 }
-const handleDeleteDay = (dayId) => {
-  if(confirm(t.value.confirm_delete_day_msg)) deleteDay(dayId)
-}
-
-const openCreateItem = (dayId) => {
-  isEditing.value = false
-  activeDayId.value = dayId
-  form.value = { id: null, start_time: '', end_time: '', title: '', description: '', location: '', icon: '📍' }
-  isModalOpen.value = true
-}
-const openEditItem = (dayId, item) => {
-  isEditing.value = true
-  activeDayId.value = dayId
-  form.value = { ...item }
-  isModalOpen.value = true
-}
+const handleDeleteDay = (dayId) => { if(confirm(t.value.confirm_delete_day_msg)) deleteDay(dayId) }
+const openCreateItem = (dayId) => { isEditing.value = false; activeDayId.value = dayId; form.value = { id: null, start_time: '', end_time: '', title: '', description: '', location: '', icon: '📍' }; isModalOpen.value = true }
+const openEditItem = (dayId, item) => { isEditing.value = true; activeDayId.value = dayId; form.value = { ...item }; isModalOpen.value = true }
 const handleSaveItem = () => {
   if (!form.value.title || !form.value.start_time) return alert(t.value.warning_fill_all)
   const payload = { ...form.value }
   isEditing.value ? updateItem(activeDayId.value, payload) : addItem(activeDayId.value, payload)
   isModalOpen.value = false
 }
-const handleDeleteItem = (dayId, itemId) => {
-  if(confirm(t.value.confirm_delete_activity_msg)) deleteItem(dayId, itemId)
-}
+const handleDeleteItem = (dayId, itemId) => { if(confirm(t.value.confirm_delete_activity_msg)) deleteItem(dayId, itemId) }
 const availableIcons = ['📝','🎤','☕','🍔','🗣️','🤝','🎉','🚌','🏨','💻','🎨','📍','📸','🏆','🎵']
 </script>
 
 <template>
   <div class="min-h-screen bg-gray-50/30">
-    <div class="max-w-5xl mx-auto py-8 px-4 sm:px-6 pb-24">
+    <div class="max-w-5xl mx-auto py-6 px-4 sm:px-6 pb-24">
       
       <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-10">
         <div>
           <h2 class="text-3xl font-extrabold text-gray-900 tracking-tight">{{ t.timeline_title }}</h2>
           <p class="text-gray-500 mt-1 text-sm">{{ t.timeline_subtitle }}</p>
         </div>
-        <UiButton variant="primary" @click="openAddDay" class="shadow-lg hover:shadow-xl transition-shadow">
+        <UiButton variant="primary" @click="openAddDay" class="shadow-lg hover:shadow-xl transition-shadow hidden sm:flex">
           <span class="mr-2 text-lg">+</span> {{ t.add_day }}
         </UiButton>
       </div>
@@ -171,6 +156,8 @@ const availableIcons = ['📝','🎤','☕','🍔','🗣️','🤝','🎉','🚌
         </transition>
       </div>
     </div>
+    
+    <EventFabButton @click="openAddDay" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 shadow-xl z-50 hover:scale-110 transition-transform" />
     
     <EventBottomNav :eventId="eventId" />
 

@@ -5,7 +5,14 @@ export const useAuth = () => {
   // ฟังก์ชันดึงข้อมูล User ปัจจุบัน (เช็คว่าล็อกอินอยู่ไหม)
   const fetchUser = async () => {
     try {
-      const { user: userData } = await $fetch('/api/auth/user')
+      // ✅ เพิ่มบรรทัดนี้: ดึง Cookie จาก Request ปัจจุบัน
+      const headers = useRequestHeaders(['cookie'])
+
+      // ✅ ส่ง headers ไปพร้อมกับ request
+      const { user: userData } = await $fetch('/api/auth/user', {
+        headers
+      })
+      
       user.value = userData
     } catch (e) {
       user.value = null

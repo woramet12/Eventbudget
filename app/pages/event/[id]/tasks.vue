@@ -3,12 +3,15 @@ import { ref } from 'vue'
 import { useRoute } from 'vue-router'
 import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
-// นำเข้า Nav และ FAB
 import EventBottomNav from '~/components/layout/EventBottomNav.vue'
 import EventFabButton from '~/components/event/EventFabButton.vue'
-
 import { useEventDetailsApi } from '~/composables/useEventDetailsApi'
 import { useAppLocale } from '~/composables/useAppLocale'
+
+// ✅ เรียกใช้ Layout 'event'
+definePageMeta({
+  layout: 'event'
+})
 
 const { t } = useAppLocale()
 const route = useRoute()
@@ -26,7 +29,7 @@ const handleDelete = (id) => { if(confirm(t.value.confirm_delete_task)) deleteTa
 
 <template>
   <div class="min-h-screen bg-gray-50/30">
-    <div class="max-w-3xl mx-auto py-8 px-4 sm:px-6 pb-24">
+    <div class="max-w-3xl mx-auto py-6 px-4 sm:px-6 pb-24">
       
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-2xl font-bold text-gray-900">{{ t.tasks_title }}</h2>
@@ -61,7 +64,6 @@ const handleDelete = (id) => { if(confirm(t.value.confirm_delete_task)) deleteTa
     </div>
 
     <EventFabButton @click="openCreate" class="fixed bottom-24 right-4 md:bottom-8 md:right-8 shadow-xl z-50 hover:scale-110 transition-transform" />
-
     <EventBottomNav :eventId="eventId" />
     
     <div v-if="isModalOpen" class="fixed inset-0 flex items-center justify-center p-4 z-[100]">
@@ -84,11 +86,10 @@ const handleDelete = (id) => { if(confirm(t.value.confirm_delete_task)) deleteTa
         </div>
       </div>
     </div>
-
   </div>
 </template>
 
 <style scoped>
 .animate-scale-up { animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
 @keyframes scaleUp { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
-</style>
+</style> 

@@ -1,4 +1,4 @@
-// fileName: app/composables/useAppLocale.js
+// app/composables/useAppLocale.js
 export const useAppLocale = () => {
   const locale = useCookie('app_lang', { 
     default: () => 'th',
@@ -74,6 +74,8 @@ export const useAppLocale = () => {
       confirm_delete_event_msg: 'ต้องการลบอีเวนต์นี้จริงหรือไม่?',
 
       // --- Page: Event Detail ---
+      event_details_header: 'รายละเอียด',
+      event_details_sub: 'ข้อมูลสำคัญและภาพรวมของงาน',
       event_date: 'วันจัดงาน',
       budget: 'งบประมาณ',
       client: 'ลูกค้า',
@@ -234,6 +236,8 @@ export const useAppLocale = () => {
       confirm_delete_event_msg: 'Are you sure you want to delete this event?',
 
       // --- Page: Event Detail ---
+      event_details_header: 'Event Details',
+      event_details_sub: 'Key information and overview',
       event_date: 'Event Date',
       budget: 'Budget',
       client: 'Client',

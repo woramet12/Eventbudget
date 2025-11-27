@@ -76,18 +76,7 @@ watch(() => useRoute().fullPath, () => {
         </NuxtLink>
       </nav>
 
-      <div class="absolute bottom-0 w-full p-4 border-t border-gray-100 bg-gray-50/50">
-        <div class="flex items-center gap-3 px-2">
-          <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 shadow-inner">
-             <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg>
-          </div>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-semibold text-gray-700 truncate">Admin User</p>
-            <p class="text-xs text-gray-500 truncate">admin@eventbudget.com</p>
-          </div>
-        </div>
-      </div>
-
+      
     </aside>
   </div>
 </template>

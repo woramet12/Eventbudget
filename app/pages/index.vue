@@ -6,6 +6,7 @@ import EventFormModal from '~/components/event/EventFormModal.vue'
 import UiButton from '~/components/ui/UiButton.vue' 
 import { useAppLocale } from '~/composables/useAppLocale'
 import { useRouter } from 'vue-router'
+import { useEventsApi } from '~/composables/useEventsApi' // ✅ เพิ่ม import ให้ครบถ้วน
 
 const { t } = useAppLocale()
 const router = useRouter()
@@ -61,7 +62,8 @@ const handleDelete = async (event) => {
 </script>
 
 <template>
-  <div class="max-w-7xl mx-auto pb-24 px-4 sm:px-0 pt-6">
+  <div class="min-h-screen bg-gray-50/30">
+    <div class="max-w-7xl mx-auto pb-24 px-4 sm:px-0 pt-6">
       
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div class="md:col-span-1">
@@ -126,11 +128,11 @@ const handleDelete = async (event) => {
         </div>
       </div>
       
+      
       <EventFormModal :show="isModalOpen" :event="selectedEvent" :isEditing="isEditing" @close="isModalOpen = false" @save="handleSave" />
       
-      <template>
-        <EventFabButton @click="openCreateModal" class="fixed bottom-8 right-8 shadow-xl shadow-accent/40 z-40 hover:scale-110 active:scale-95 transition-transform duration-200" />
-      </template>
+      <EventFabButton @click="openCreateModal" class="fixed bottom-8 right-8 shadow-xl shadow-accent/40 z-40 hover:scale-110 active:scale-95 transition-transform duration-200" />
 
+    </div>
   </div>
 </template>
