@@ -1,3 +1,4 @@
+
 <script setup>
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
@@ -5,13 +6,11 @@ import UiButton from '~/components/ui/UiButton.vue'
 import UiInput from '~/components/ui/UiInput.vue'
 import EventBottomNav from '~/components/layout/EventBottomNav.vue'
 import EventFabButton from '~/components/event/EventFabButton.vue'
-// ❌ ลบ import EventSubNav ออก เพราะใน Layout มีแล้ว
-// import EventSubNav from '~/components/layout/EventSubNav.vue'
 
 import { useExpensesApi } from '~/composables/useExpensesApi'
+import { useCategories } from '~/composables/useCategories'
 import { useAppLocale } from '~/composables/useAppLocale'
 
-// ✅ เรียกใช้ Layout 'event' (ซึ่งมี EventSubNav อยู่แล้ว)
 definePageMeta({
   layout: 'event'
 })
@@ -19,12 +18,16 @@ definePageMeta({
 const route = useRoute()
 const { t } = useAppLocale()
 const eventId = route.params.id
-const { getExpensesByEventId, addExpense, updateExpense, removeExpense, categories } = useExpensesApi()
+const { getExpensesByEventId, addExpense, updateExpense, removeExpense } = useExpensesApi()
+const { categories, loadCategories } = useCategories()
 
 const expenses = getExpensesByEventId(eventId)
 const isModalOpen = ref(false)
 const isEditing = ref(false)
 const form = ref({ id: null, name: '', amount: null, estimated_amount: null, is_paid: false, date: '', time: '', category: '' })
+
+// โหลด categories เมื่อเริ่มต้น
+loadCategories()
 
 // ... (Logic เดิมทั้งหมด) ...
 const expensesGrouped = computed(() => {

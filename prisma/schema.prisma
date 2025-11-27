@@ -94,6 +94,7 @@ model Category {
   id        Int      @id @default(autoincrement())
   name      String
   icon      String?
+  color     String?  // ✅ เพิ่ม field color
 }
 
 // 7. ผู้ใช้งาน (User)
@@ -105,14 +106,4 @@ model User {
   avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model Task {
-  id           Int      @id @default(autoincrement())
-  title        String
-  is_completed Boolean  @default(false)
-  due_date     String?
-  due_time     String?  // ✅ เพิ่มบรรทัดนี้
-  eventId      Int
-  event        Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
 }
